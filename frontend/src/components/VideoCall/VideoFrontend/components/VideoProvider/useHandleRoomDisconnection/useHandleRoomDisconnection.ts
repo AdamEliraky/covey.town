@@ -9,8 +9,8 @@ export default function useHandleRoomDisconnection(
   removeLocalAudioTrack: () => void,
   removeLocalVideoTrack: () => void,
   isSharingScreen: boolean,
-  toggleScreenShare: () => void,
-  onDisconnect: ( )=> void
+  stopScreenShare: (reason: 'disconnect') => void,
+  onDisconnect: () => void
 ) {
   useEffect(() => {
     if (room) {
@@ -22,7 +22,7 @@ export default function useHandleRoomDisconnection(
         removeLocalAudioTrack();
         removeLocalVideoTrack();
         if (isSharingScreen) {
-          toggleScreenShare();
+          stopScreenShare('disconnect');
         }
         onDisconnect();
       };
@@ -32,5 +32,5 @@ export default function useHandleRoomDisconnection(
         room.off('disconnected', onDisconnected);
       };
     }
-  }, [room, onError, removeLocalAudioTrack, removeLocalVideoTrack, isSharingScreen, toggleScreenShare, onDisconnect]);
+  }, [room, onError, removeLocalAudioTrack, removeLocalVideoTrack, isSharingScreen, stopScreenShare, onDisconnect]);
 }

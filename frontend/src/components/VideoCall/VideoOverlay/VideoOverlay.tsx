@@ -16,6 +16,8 @@ import useLocalVideoToggle from '../VideoFrontend/hooks/useLocalVideoToggle/useL
 import './VideoGrid.module.scss';
 import MediaErrorSnackbar from '../VideoFrontend/components/PreJoinScreens/MediaErrorSnackbar/MediaErrorSnackbar';
 import useTownController from '../../../hooks/useTownController';
+import ScreenShareTestPanel from '../VideoFrontend/components/ScreenShareTest/ScreenShareTestPanel';
+import { isScreenShareTestEnabled } from '../VideoFrontend/components/ScreenShareTest/screenShareTestLog';
 
 const Container = styled('div')({
   // display: 'grid',
@@ -124,6 +126,7 @@ export default function VideoGrid(props: Props) {
               <Room />
             </Container>
             <MenuBar />
+            {isScreenShareTestEnabled() && <ScreenShareTestPanel />}
           </Main>
         )}
         <MediaErrorSnackbar error={mediaError} />
