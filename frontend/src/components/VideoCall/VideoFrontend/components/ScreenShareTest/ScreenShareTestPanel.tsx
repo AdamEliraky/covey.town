@@ -64,11 +64,19 @@ export default function ScreenShareTestPanel() {
     const nameOf = (p: Participant) =>
       townController.players.find(player => player.id === p.identity)?.userName ?? p.identity;
 
-    const onSubscribed = (track: RemoteTrack, pub: RemoteTrackPublication, p: RemoteParticipant) => {
+    const onSubscribed = (
+      track: RemoteTrack,
+      pub: RemoteTrackPublication,
+      p: RemoteParticipant,
+    ) => {
       logScreenShareEvent(`Subscribed to ${nameOf(p)}'s ${pub.trackName || track.kind} track`);
       refresh();
     };
-    const onUnsubscribed = (track: RemoteTrack, pub: RemoteTrackPublication, p: RemoteParticipant) => {
+    const onUnsubscribed = (
+      track: RemoteTrack,
+      pub: RemoteTrackPublication,
+      p: RemoteParticipant,
+    ) => {
       logScreenShareEvent(`Unsubscribed from ${nameOf(p)}'s ${pub.trackName || track.kind} track`);
       refresh();
     };
@@ -77,7 +85,8 @@ export default function ScreenShareTestPanel() {
       refresh();
     };
     const onUnpublished = (pub: RemoteTrackPublication, p: RemoteParticipant) => {
-      if (isScreenPublication(pub)) logScreenShareEvent(`${nameOf(p)} unpublished their screen track`);
+      if (isScreenPublication(pub))
+        logScreenShareEvent(`${nameOf(p)} unpublished their screen track`);
       refresh();
     };
     const onConnected = (p: RemoteParticipant) => {
@@ -105,7 +114,9 @@ export default function ScreenShareTestPanel() {
     room.on('reconnecting', onReconnecting);
     room.on('reconnected', onReconnected);
     room.on('disconnected', onRoomDisconnected);
-    logScreenShareEvent(`Test panel attached to video room ${room.name} as ${room.localParticipant.identity}`);
+    logScreenShareEvent(
+      `Test panel attached to video room ${room.name} as ${room.localParticipant.identity}`,
+    );
     return () => {
       room.off('trackSubscribed', onSubscribed);
       room.off('trackUnsubscribed', onUnsubscribed);
@@ -120,7 +131,8 @@ export default function ScreenShareTestPanel() {
   }, [room, townController]);
 
   const localIdentity = room?.localParticipant.identity;
-  const sharerIsLocal = !!screenShareParticipant && screenShareParticipant.identity === localIdentity;
+  const sharerIsLocal =
+    !!screenShareParticipant && screenShareParticipant.identity === localIdentity;
   const sharerIsNearby =
     !!screenShareParticipant && nearbyPlayers.some(p => p.id === screenShareParticipant.identity);
   const nameOfId = (id: string) =>
@@ -132,7 +144,9 @@ export default function ScreenShareTestPanel() {
   const sharerId = screenShareParticipant?.identity;
   useEffect(() => {
     if (sharerId && !sharerIsLocal) {
-      logScreenShareEvent(`Sharer ${sharerId} is ${sharerIsNearby ? 'NEARBY' : 'NOT nearby'} this player`);
+      logScreenShareEvent(
+        `Sharer ${sharerId} is ${sharerIsNearby ? 'NEARBY' : 'NOT nearby'} this player`,
+      );
     }
   }, [sharerId, sharerIsLocal, sharerIsNearby]);
 
@@ -150,9 +164,11 @@ export default function ScreenShareTestPanel() {
     const text = getScreenShareLog()
       .map(e => `${e.time} ${e.message}`)
       .join('\n');
-    navigator.clipboard?.writeText(`Client: ${nameOfId(localIdentity ?? '')}\n${text}`).catch(() => {
-      // Clipboard can be blocked (e.g. non-https); the log is also in the console.
-    });
+    navigator.clipboard
+      ?.writeText(`Client: ${nameOfId(localIdentity ?? '')}\n${text}`)
+      .catch(() => {
+        // Clipboard can be blocked (e.g. non-https); the log is also in the console.
+      });
   };
 
   return (
@@ -173,7 +189,8 @@ export default function ScreenShareTestPanel() {
         padding: 8,
         fontSize: 12,
         fontFamily: 'monospace',
-      }}>
+      }}
+    >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <strong>Screen share test</strong>
         <button onClick={() => setCollapsed(c => !c)}>{collapsed ? 'Expand' : 'Collapse'}</button>
@@ -186,7 +203,8 @@ export default function ScreenShareTestPanel() {
             <button
               data-testid='screen-share-test-toggle'
               disabled={!room || (!!screenShareParticipant && !sharerIsLocal)}
-              onClick={toggleScreenShare}>
+              onClick={toggleScreenShare}
+            >
               {isSharingScreen ? 'Stop sharing' : 'Share screen'}
             </button>
           </div>
@@ -233,7 +251,9 @@ export default function ScreenShareTestPanel() {
               {remoteParticipants.map(p => (
                 <tr key={p.sid}>
                   <td style={cell}>{nameOfId(p.identity)}</td>
-                  <td style={cell}>{nearbyPlayers.some(n => n.id === p.identity) ? 'yes' : 'no'}</td>
+                  <td style={cell}>
+                    {nearbyPlayers.some(n => n.id === p.identity) ? 'yes' : 'no'}
+                  </td>
                   <td style={cell}>{subscriptionState(p, 'screen')}</td>
                   <td style={cell}>{subscriptionState(p, 'audio')}</td>
                 </tr>
@@ -252,7 +272,8 @@ export default function ScreenShareTestPanel() {
               background: '#f4f4f4',
               padding: 4,
               whiteSpace: 'pre-wrap',
-            }}>
+            }}
+          >
             {log.length === 0
               ? 'No events yet'
               : log

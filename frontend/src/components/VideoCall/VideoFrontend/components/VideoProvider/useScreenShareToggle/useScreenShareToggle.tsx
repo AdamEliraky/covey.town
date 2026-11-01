@@ -45,7 +45,9 @@ export default function useScreenShareToggle(room: Room | null, onError: ErrorCa
           logScreenShareEvent('Picker returned a stream with no video track');
           return;
         }
-        logScreenShareEvent(`Picker accepted (${track.label || 'unknown source'}), publishing track`);
+        logScreenShareEvent(
+          `Picker accepted (${track.label || 'unknown source'}), publishing track`,
+        );
 
         // All video tracks are published with 'low' priority. This works because the video
         // track that is displayed in the 'MainParticipant' component will have it's priority
@@ -69,7 +71,9 @@ export default function useScreenShareToggle(room: Room | null, onError: ErrorCa
               } catch (e) {
                 // Unpublishing from a room that has already disconnected can throw; the track
                 // still needs to be stopped below so the browser's sharing indicator goes away.
-                logScreenShareEvent(`Unpublish failed (${(e as Error).message}); stopping track anyway`);
+                logScreenShareEvent(
+                  `Unpublish failed (${(e as Error).message}); stopping track anyway`,
+                );
               }
               track.stop();
               stopScreenShareRef.current = null;

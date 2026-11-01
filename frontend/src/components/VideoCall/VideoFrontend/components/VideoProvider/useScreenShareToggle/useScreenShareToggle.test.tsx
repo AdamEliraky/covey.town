@@ -165,7 +165,9 @@ describe('useScreenShareToggle', () => {
     const track = makeTrack();
     const room = makeRoom();
     const onError = jest.fn();
-    room.localParticipant.publishTrack.mockImplementation(() => Promise.reject(new Error('publish failed')));
+    room.localParticipant.publishTrack.mockImplementation(() =>
+      Promise.reject(new Error('publish failed')),
+    );
     mockPicker(() => Promise.resolve(streamWith(track)));
     const { result, waitFor } = renderHook(() => useScreenShareToggle(room, onError));
 
