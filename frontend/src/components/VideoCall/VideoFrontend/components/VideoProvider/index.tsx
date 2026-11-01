@@ -68,7 +68,7 @@ export function VideoProvider({ options, children, onError = () => {}, onDisconn
   } = useLocalTracks();
   const { room, isConnecting, connect } = useRoom(localTracks, onErrorCallback, options);
 
-  const [isSharingScreen, toggleScreenShare] = useScreenShareToggle(room, onError);
+  const [isSharingScreen, toggleScreenShare, stopScreenShare] = useScreenShareToggle(room, onError);
 
   // Register callback functions to be called on room disconnect.
   useHandleRoomDisconnection(
@@ -77,7 +77,7 @@ export function VideoProvider({ options, children, onError = () => {}, onDisconn
     removeLocalAudioTrack,
     removeLocalVideoTrack,
     isSharingScreen,
-    toggleScreenShare,
+    stopScreenShare,
     onDisconnect
   );
   useHandleTrackPublicationFailed(room, onError);
